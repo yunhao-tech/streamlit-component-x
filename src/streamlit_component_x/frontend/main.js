@@ -1,14 +1,20 @@
-function sendValue(value) {
-  Streamlit.setComponentValue(value)
-}
 
 function sendValue_continue(pressed_key, value, suggestion) {
   
   const input = document.getElementById("input_box");
   if (pressed_key == 'ArrowRight') {
+    window.picked = true
     input.value = input.value + suggestion.split(" ")[0] + " "
     document.getElementById("suggestion").innerText = suggestion.split(" ").slice(1,).join(" ")
+  } else {
+    window.picked = false
   }
+  if (pressed_key == " ") {
+    window.noExecute = false
+  } else {
+    window.noExecute = true
+  }
+
   Streamlit.setComponentValue(value)
 }
 
@@ -45,8 +51,10 @@ function onRender(event) {
 // Render the component whenever python send a "render event"
 Streamlit.events.addEventListener(Streamlit.RENDER_EVENT, onRender)
 Streamlit.events.addEventListener(Streamlit.RENDER_EVENT, (e) => {
-  if (document.getElementById("suggestion").innerText == "") {
-    document.getElementById("suggestion").innerText = e.data.args.suggestion
+  if (!window.noExecute) {
+    if (!window.picked || document.getElementById("suggestion").innerText == "") {
+      document.getElementById("suggestion").innerText = e.data.args.suggestion
+    }
   }
 })
 // Tell Streamlit that the component is ready to receive events

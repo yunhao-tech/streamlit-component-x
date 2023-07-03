@@ -42,16 +42,18 @@ def streamlit_component_x(
     return component_value
 
 def run():
-    if "msg" in st.session_state and st.session_state.msg is not None:
-        model = load_model()
-        result = inference(st.session_state.msg, model)
-        st.session_state.suggestion = result
+    if "cur_msg" in st.session_state and st.session_state.cur_msg is not None:
+        # model = load_model()
+        # result = inference(st.session_state.cur_msg, model)
+        # st.session_state.suggestion = result
+        st.session_state.suggestion = "1 2 3."
 
 def main():
     if "suggestion" not in st.session_state:
         st.session_state.suggestion = ""
-    
-    value2 = streamlit_component_x(label="Current message: ", suggestion=st.session_state.suggestion, key="msg", on_change=run)
+    st.title("Email Copilot")
+    st.text_input("Current mail subject: ", key="cur_sub", on_change=run)
+    value2 = streamlit_component_x(label="Current message: ", suggestion=st.session_state.suggestion, key="cur_msg", on_change=run)
     st.write(value2)
     # st.write(st.session_state.suggestion)
     
